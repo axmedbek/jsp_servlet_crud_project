@@ -1,13 +1,9 @@
 package com.axmedbek.repository;
 
-import com.axmedbek.dao.DBConnection;
 import com.axmedbek.modal.Person;
 import com.axmedbek.service.PersonService;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +16,15 @@ public class PersonRepository implements PersonService {
     }
 
     public void savePerson(Person person) {
+        try {
+            String query = "INSERT INTO persons(name,surname) VALUES(?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,person.getName());
+            preparedStatement.setString(2,person.getSurname());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Person getPersonById(int id) {
@@ -43,6 +48,12 @@ public class PersonRepository implements PersonService {
     }
 
     public void deletePerson(int id) {
-
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM persons WHERE id = ?");
+            preparedStatement.setInt(1,id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

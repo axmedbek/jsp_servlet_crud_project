@@ -33,6 +33,7 @@
                 <td>No</td>
                 <td>Name</td>
                 <td>Surname</td>
+                <td>Operation</td>
             </tr>
             </thead>
             <tbody>
@@ -43,6 +44,13 @@
                 <td><%=p.getName()%>
                 </td>
                 <td><%=p.getSurname()%>
+                </td>
+                <td>
+                    <form id="deletePersonForm" action="/deletePerson" method="post">
+                        <input type="hidden" name="id" value="<%=p.getId()%>">
+                    </form>
+                    <a href="javascript:void(0)" class="btn btn-info btn-sm editPerson"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger btn-sm deletePerson"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
             <% } %>
@@ -59,11 +67,21 @@
                         </button>
                     </div>
                     <div class="modal-body">
-
+                        <form id="savePersonForm" action="/addPerson" method="post">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" placeholder="Enter name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label>Surname</label>
+                                <input type="text" class="form-control" placeholder="Enter surname" name="surname">
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success savePerson"><i class="fa fa-user-plus"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -73,8 +91,38 @@
 </div>
 <jsp:include page="layouts/footer.jsp"></jsp:include>
 <script>
-    $('.addNewUser').click(function(){
+    $('.addNewUser').click(function () {
         $('#myModal').modal('show');
+    });
+
+    $('.savePerson').click(function () {
+        $('#savePersonForm').submit();
+    });
+
+    $('.deletePerson').click(function () {
+        $.confirm({
+            title: 'Təsdiq',
+            content: 'Silmək istədiyinizə əminsizin?',
+            type: 'red',
+            typeAnimated: true,
+            buttons : {
+                positiveButton: {
+                    text : "Sil",
+                    btnClass : 'btn-green',
+                    action:function(){
+                        $('#deletePersonForm').submit();
+                    },
+                },
+                negativeButton : {
+                    text : "İmtina",
+                    btnClass : 'btn-red',
+                    action:function(){
+
+                    },
+                }
+            }
+        });
+
     });
 </script>
 </body>
